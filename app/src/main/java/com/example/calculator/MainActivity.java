@@ -1,8 +1,12 @@
 package com.example.calculator;
 
+import static android.icu.lang.UProperty.MATH;
+
 import android.annotation.SuppressLint;
+import android.media.VolumeShaper;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,10 +23,11 @@ import com.google.android.material.button.MaterialButton;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     TextView resultTv,solutionTv;
-    MaterialButton buttonC,buttonBrackOpen,buttonBrackClose;
+    MaterialButton buttonC, buttonDot;
     MaterialButton buttonDivide,buttonMultiply,buttonPlus,buttonMinus,buttonEquals;
     MaterialButton button0,button1,button2,button3,button4,button5,button6,button7,button8,button9;
-    MaterialButton buttonAC,buttonDot;
+
+    boolean useDegrees = false;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -33,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         solutionTv = findViewById(R.id.solution_tv);
 
         assignID(buttonC,R.id.button_c);
-        assignID(buttonBrackOpen,R.id.button_open_bracket);
-        assignID(buttonBrackClose,R.id.button_close_bracket);
         assignID(buttonDivide,R.id.button_divide);
         assignID(buttonMultiply,R.id.button_multiply);
         assignID(buttonPlus,R.id.button_plus);
@@ -50,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         assignID(button7,R.id.button_7);
         assignID(button8,R.id.button_8);
         assignID(button9,R.id.button_9);
-        assignID(buttonAC,R.id.button_ac);
         assignID(buttonDot,R.id.button_dot);
 
 
@@ -104,5 +106,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }catch(Exception e){
             return ("Error");
         }
+    }
+
+    public void onDegrees(View v){
+        useDegrees = !useDegrees;
+        ((Button) v).setText(useDegrees?"D":"R");
+    }
+
+    public void onSIN(View v){
+        double input;
+        try{
+            input = Double.parseDouble(resultTv.getText().toString());
+        }catch(NumberFormatException e){
+            return;
+        }
+        if(useDegrees) input *= (Math.PI/180);
+        resultTv.setText(String.valueOf(Math.sin(input)));
+    }
+
+    public void onCOS(View v){
+        double input;
+        try{
+            input = Double.parseDouble(resultTv.getText().toString());
+        }catch(NumberFormatException e){
+            return;
+        }
+        if(useDegrees) input *= (Math.PI/180);
+        resultTv.setText(String.valueOf(Math.cos(input)));
+    }
+
+    public void onTAN(View v) {
+        double input;
+        try {
+            input = Double.parseDouble(resultTv.getText().toString());
+        } catch (NumberFormatException e) {
+            return ;
+        }
+        if (useDegrees) input *= (Math.PI / 180);
+        resultTv.setText(String.valueOf(Math.tan(input)));
     }
 }
